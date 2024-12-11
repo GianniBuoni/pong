@@ -1,3 +1,5 @@
+import pygame
+
 WINDOW_WIDTH, WINDOW_HEIGHT = 1280, 720
 
 SIZE = {'paddle': (40,100), 'ball': (30,30)}

@@ -1,5 +1,3 @@
-import pygame
-
 from lib.constants import *
 from lib.sprites import *
 
