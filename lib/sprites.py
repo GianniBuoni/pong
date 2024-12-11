@@ -1,5 +1,6 @@
 # pyright: reportOptionalMemberAccess = false
 import pygame
+from random import choice, uniform
 
 from lib.constants import *
 
@@ -7,7 +8,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, groups) -> None:
         super().__init__(groups)
 
-        # images
+        # image
         self.image = pygame.Surface(SIZE["paddle"])
         self.image.fill(COLORS["paddle"])
         self.rect = self.image.get_frect(center = POS["player"])
@@ -27,4 +28,28 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.get_diretion()
+        self.move(dt)
+
+class Ball(pygame.sprite.Sprite):
+    def __init__(self, groups, paddle_group) -> None:
+        super().__init__(groups)
+
+        # image
+        self.image = pygame.Surface(SIZE["ball"])
+        self.image.fill(COLORS["ball"])
+        self.rect = self.image.get_frect(center = (
+            WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2
+        ))
+
+        # movement
+        self.direction = pygame.Vector2(
+            choice((-1, 1)),
+            uniform(0.7, 0.8) * choice((-1, 1))
+        )
+        self.speed = SPEED["ball"]
+
+    def move(self, dt):
+        self.rect.center += self.direction * self.speed * dt
+
+    def update(self, dt):
         self.move(dt)
