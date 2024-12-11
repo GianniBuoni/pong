@@ -9,8 +9,13 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
 
         # image
-        self.image = pygame.Surface(SIZE["paddle"])
-        self.image.fill(COLORS["paddle"])
+        self.image = pygame.Surface(SIZE["paddle"], pygame.SRCALPHA)
+        pygame.draw.rect(
+            self.image,
+            COLORS["paddle"],
+            pygame.FRect((0,0), SIZE["paddle"]),
+            0, 10
+        )
         self.rect = self.image.get_frect(center = POS["player"])
 
         # movement
@@ -35,8 +40,14 @@ class Ball(pygame.sprite.Sprite):
         super().__init__(groups)
 
         # image
-        self.image = pygame.Surface(SIZE["ball"])
-        self.image.fill(COLORS["ball"])
+        self.image = pygame.Surface(SIZE["ball"], pygame.SRCALPHA)
+        circle_rad = SIZE["ball"][0] / 2
+        pygame.draw.circle(
+            self.image,
+            COLORS["ball"],
+            (circle_rad, circle_rad),
+            circle_rad
+        )
         self.rect = self.image.get_frect(center = (
             WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2
         ))
