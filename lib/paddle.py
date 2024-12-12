@@ -13,6 +13,8 @@ class Paddle(pygame.sprite.Sprite):
             pygame.FRect((0,0), SIZE["paddle"]),
             0, 4
         )
+        self.rect = self.image.get_frect()
+        self.rect_old = self.rect.copy()
 
         # movement
         self.direction = 0 # paddle only moves on y axis
@@ -34,8 +36,7 @@ class Paddle(pygame.sprite.Sprite):
 class Player(Paddle):
     def __init__(self, groups) -> None:
         super().__init__(groups)
-        self.rect = self.image.get_frect(center = POS["player"])
-        self.rect_old = self.rect.copy()
+        self.rect.center = POS["player"]
         self.speed = SPEED["player"]
 
     def get_diretion(self):
@@ -45,8 +46,7 @@ class Player(Paddle):
 class Opponent(Paddle):
     def __init__(self, groups, ball_sprite) -> None:
         super().__init__(groups)
-        self.rect = self.image.get_frect(center = POS["opponent"])
-        self.rect_old = self.rect.copy()
+        self.rect.center = POS["opponent"]
         self.speed = SPEED["opponent"]
         self.ball = ball_sprite
 
