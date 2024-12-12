@@ -16,6 +16,15 @@ class Paddle(pygame.sprite.Sprite):
         self.rect = self.image.get_frect()
         self.rect_old = self.rect.copy()
 
+        # shadows
+        self.shadow_surface = self.image.copy()
+        pygame.draw.rect(
+            self.shadow_surface,
+            COLORS["paddle shadow"],
+            pygame.FRect((0,0), SIZE["paddle"]),
+            0, 4
+        )
+
         # movement
         self.direction = 0 # paddle only moves on y axis
         self.speed = 0 # child should have an override

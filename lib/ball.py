@@ -18,6 +18,16 @@ class Ball(pygame.sprite.Sprite):
             circle_rad
         )
 
+        # shadow
+        self.shadow_surface = self.image.copy()
+        circle_rad = SIZE["ball"][0] / 2
+        pygame.draw.circle(
+            self.shadow_surface,
+            COLORS["ball shadow"],
+            (circle_rad, circle_rad),
+            circle_rad
+        )
+
         # rect
         self.rect = self.image.get_frect(center = (
             WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2
