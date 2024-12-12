@@ -45,14 +45,14 @@ class Ball(pygame.sprite.Sprite):
                         self.direction *= -1
                     if self.rect.left <= sprite.rect.right and self.rect_old.left >= sprite.rect_old.right:
                         self.rect.left = sprite.rect.right
-                        self.direction *= -1
+                        self.direction.x *= -1
                 else:
                     if self.rect.bottom >= sprite.rect.top and self.rect_old.bottom <= sprite.rect_old.top:
                         self.rect.bottom = sprite.rect.top
                         self.direction *= -1
                     if self.rect.top <= sprite.rect.bottom and self.rect_old.top >= sprite.rect_old.bottom:
                         self.rect.top = self.rect.bottom
-                        self.direction *= -1
+                        self.direction.y *= -1
 
     def wall_collide(self):
         if self.rect.top <= 0:
