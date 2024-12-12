@@ -3,8 +3,9 @@ from lib.constants import *
 from random import choice, uniform
 
 class Ball(pygame.sprite.Sprite):
-    def __init__(self, groups, paddle_group) -> None:
+    def __init__(self, groups, paddle_sprites) -> None:
         super().__init__(groups)
+        self.paddle_sprites = paddle_sprites
 
         # image
         self.image = pygame.Surface(SIZE["ball"], pygame.SRCALPHA)
@@ -15,9 +16,12 @@ class Ball(pygame.sprite.Sprite):
             (circle_rad, circle_rad),
             circle_rad
         )
+
+        # rect
         self.rect = self.image.get_frect(center = (
             WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2
         ))
+        self.rect_old = self.rect.copy()
 
         # movement
         self.direction = pygame.Vector2(
@@ -27,7 +31,28 @@ class Ball(pygame.sprite.Sprite):
         self.speed = SPEED["ball"]
 
     def move(self, dt):
-        self.rect.center += self.direction * self.speed * dt
+        self.rect.x += self.direction.x * self.speed * dt
+        self.paddle_collide("horizontal")
+        self.rect.y += self.direction.y * self.speed * dt
+        self.paddle_collide("vertical")
+
+    def paddle_collide(self, direction):
+        for sprite in self.paddle_sprites:
+            if sprite.rect.colliderect(self.rect):
+                if direction == "horizontal":
+                    if self.rect.right >= sprite.rect.left and self.rect_old.right <= sprite.rect_old.left:
+                        self.rect.right = sprite.rect.left
+                        self.direction *= -1
+                    if self.rect.left <= sprite.rect.right and self.rect_old.left >= sprite.rect_old.right:
+                        self.rect.left = sprite.rect.right
+                        self.direction *= -1
+                else:
+                    if self.rect.bottom >= sprite.rect.top and self.rect_old.bottom <= sprite.rect_old.top:
+                        self.rect.bottom = sprite.rect.top
+                        self.direction *= -1
+                    if self.rect.top <= sprite.rect.bottom and self.rect_old.top >= sprite.rect_old.bottom:
+                        self.rect.top = self.rect.bottom
+                        self.direction *= -1
 
     def wall_collide(self):
         if self.rect.top <= 0:
@@ -44,5 +69,6 @@ class Ball(pygame.sprite.Sprite):
             self.direction.x *= -1
 
     def update(self, dt):
+        self.rect_old = self.rect.copy()
         self.move(dt)
         self.wall_collide()

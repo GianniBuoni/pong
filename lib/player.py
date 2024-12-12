@@ -14,6 +14,7 @@ class Player(pygame.sprite.Sprite):
             0, 4
         )
         self.rect = self.image.get_frect(center = POS["player"])
+        self.rect_old = self.rect.copy()
 
         # movement
         self.direction = 0 # paddle only moves on y axis
@@ -29,5 +30,6 @@ class Player(pygame.sprite.Sprite):
         self.direction = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP])
 
     def update(self, dt):
+        self.rect_old = self.rect.copy()
         self.get_diretion()
         self.move(dt)
