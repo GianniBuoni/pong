@@ -1,4 +1,7 @@
 #pyright: reportOptionalMemberAccess = false
+from os import mkdir, path
+import json
+
 from lib.constants import *
 from lib.sprites import *
 
@@ -19,7 +22,12 @@ class Game():
         Opponent((self.all_sprites, self.paddle_sprites), self.ball)
 
         # scoring
-        self.score = { "player": 0, "opponent": 0 }
+        self.data_path = path.join("data", "score.json")
+        if path.exists(self.data_path):
+            with open(self.data_path) as f:
+                self.score = json.load(f)
+        else:
+            self.score = { "player": 0, "opponent": 0 }
         self.font = pygame.font.Font(None, 160)
 
     def display_score(self):
@@ -59,6 +67,11 @@ class Game():
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    data_dir = path.split(self.data_path)[0]
+                    if not path.exists(data_dir):
+                        mkdir(data_dir)
+                    with open(self.data_path, "w") as f:
+                        json.dump(self.score, f)
 
             # update
             self.all_sprites.update(dt)
