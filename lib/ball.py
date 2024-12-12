@@ -30,11 +30,16 @@ class Ball(pygame.sprite.Sprite):
             uniform(0.7, 0.8) * choice((-1, 1))
         )
         self.speed = SPEED["ball"]
+        self.speed_modifier = 0
+
+        # reset timer
+        self.reset_delay = 500
+        self.start_time = pygame.time.get_ticks()
 
     def move(self, dt):
-        self.rect.x += self.direction.x * self.speed * dt
+        self.rect.x += self.direction.x * self.speed * dt * self.speed_modifier
         self.paddle_collide("horizontal")
-        self.rect.y += self.direction.y * self.speed * dt
+        self.rect.y += self.direction.y * self.speed * dt * self.speed_modifier
         self.paddle_collide("vertical")
 
     def paddle_collide(self, direction):
@@ -76,8 +81,15 @@ class Ball(pygame.sprite.Sprite):
             choice((-1, 1)),
             uniform(0.7, 0.8) * choice((-1, 1))
         )
+        self.start_time = pygame.time.get_ticks()
+
+    def reset_timer(self):
+        if pygame.time.get_ticks() - self.start_time >= self.reset_delay:
+            self.speed_modifier = 1
+        else: self.speed_modifier = 0
 
     def update(self, dt):
         self.rect_old = self.rect.copy()
+        self.reset_timer()
         self.move(dt)
         self.wall_collide()
